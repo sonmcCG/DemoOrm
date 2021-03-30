@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -14,6 +16,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import repositories.IUserRepository;
+import repositories.UserRepository;
 import services.IProductService;
 import services.IUserService;
 import services.ProductService;
@@ -27,6 +31,8 @@ import java.util.Properties;
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
+@EnableSpringDataWebSupport
+@EnableJpaRepositories("repositories")
 @ComponentScan("controllers")
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
@@ -38,6 +44,10 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
         this.applicationContext = applicationContext;
     }
 
+    @Bean
+    public IUserRepository userRepository() {
+        return new UserRepository();
+    }
 
     @Bean
     public IProductService productService() {
